@@ -7,6 +7,7 @@ public class PlayerController : MonoBehaviour {
 	public float MoveSpeed;
 	public float JumpSpeed;
 	public float Gravity = 8.0f;
+	public GameObject gun;
 
 	private CharacterController cc;
 	private int health = 100;
@@ -18,16 +19,6 @@ public class PlayerController : MonoBehaviour {
 		cc = GetComponent<CharacterController>();
 
 		HealthText = ((transform.Find("UI").gameObject).transform.Find("Health").gameObject).GetComponent<Text>();
-
-		/*
-		var canvas = transform.Find("UI").gameObject;
-		if(canvas != null) {
-			Debug.Log("FOUND SOME TEXT");
-			var text = canvas.transform.Find("Health").gameObject;
-			text.GetComponent<Text>().text = health.ToString() + " HP";
-			
-		}
-		*/
 
 	}
 	
@@ -42,8 +33,6 @@ public class PlayerController : MonoBehaviour {
 			move.y = JumpSpeed;
 		}
 
-		// Apply Gravity
-		//move.y -= Gravity * Time.deltaTime;
 		cc.SimpleMove(Physics.gravity);
 		
 		// Move controller
@@ -60,6 +49,10 @@ public class PlayerController : MonoBehaviour {
 			other.gameObject.SetActive(false);
 			Destroy(other.gameObject);
 			health -= BulletDamage;
+
+			if(health <= 0) {
+				Destroy(gameObject);
+			}
 		}
 	}
 }
