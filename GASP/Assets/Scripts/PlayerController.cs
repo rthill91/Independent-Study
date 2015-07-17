@@ -10,14 +10,17 @@ public class PlayerController : MonoBehaviour {
 	public GameObject gun;
 
 	private CharacterController cc;
+	private int lives = 3;
 	private int health = 100;
 	private int BulletDamage = 10;
+	private Text LivesText;
 	private Text HealthText;
 
 	// Use this for initialization
 	void Start () {
 		cc = GetComponent<CharacterController>();
 
+		LivesText = ((transform.Find ("UI").gameObject).transform.Find ("Lives").gameObject).GetComponent<Text> ();
 		HealthText = ((transform.Find("UI").gameObject).transform.Find("Health").gameObject).GetComponent<Text>();
 
 	}
@@ -40,6 +43,7 @@ public class PlayerController : MonoBehaviour {
 	}
 
 	void LateUpdate() {
+		LivesText.text = lives.ToString () + " Lives";
 		HealthText.text = health.ToString() + " HP";
 	}
 	
@@ -51,7 +55,13 @@ public class PlayerController : MonoBehaviour {
 			health -= BulletDamage;
 
 			if(health <= 0) {
-				Destroy(gameObject);
+				if(lives <= 1) {
+					Destroy(gameObject);
+				} else {
+					lives -= 1;
+					health = 100;
+					gameObject.transform.position = GameObject.FindGameObjectWithTag("Respawn").transform.position;
+				}
 			}
 		}
 	}
