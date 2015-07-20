@@ -15,9 +15,11 @@ public class PlayerController : MonoBehaviour {
 	private int BulletDamage = 10;
 	private Text LivesText;
 	private Text HealthText;
+	private int playerID;
 
 	// Use this for initialization
 	void Start () {
+		playerID = PhotonNetwork.player.ID;
 		cc = GetComponent<CharacterController>();
 
 		LivesText = ((transform.Find ("UI").gameObject).transform.Find ("Lives").gameObject).GetComponent<Text> ();
@@ -46,22 +48,26 @@ public class PlayerController : MonoBehaviour {
 		LivesText.text = lives.ToString () + " Lives";
 		HealthText.text = health.ToString() + " HP";
 	}
-	
-
+	/*
 	void OnTriggerEnter(Collider other) {
 		if(other.tag == "Bullet") {
 			other.gameObject.SetActive(false);
 			Destroy(other.gameObject);
-			health -= BulletDamage;
-
-			if(health <= 0) {
-				if(lives <= 1) {
-					Destroy(gameObject);
-				} else {
-					lives -= 1;
-					health = 100;
-					gameObject.transform.position = GameObject.FindGameObjectWithTag("Respawn").transform.position;
-				}
+			takeDamage();
+		}
+	}
+	*/
+	[RPC]
+	void takeDamage() {
+		health -= BulletDamage;
+		
+		if (health <= 0) {
+			if (lives <= 1) {
+				Destroy (gameObject);
+			} else {
+				lives -= 1;
+				health = 100;
+				gameObject.transform.position = GameObject.FindGameObjectWithTag ("Respawn").transform.position;
 			}
 		}
 	}

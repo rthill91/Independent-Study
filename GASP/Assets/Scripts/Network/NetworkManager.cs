@@ -7,10 +7,13 @@ public class NetworkManager : MonoBehaviour {
 
 	public string roomName = "room1";
 	public string playerPrefabName = "Player";
-	public Transform spawnPoint;
+	private Transform spawnPoint;
+	public GameObject[] spawnPoints;
 
 	// Use this for initialization
 	void Start () {
+		spawnPoints = GameObject.FindGameObjectsWithTag ("Respawn");
+
 		PhotonNetwork.ConnectUsingSettings(VERSION);
 	}
 
@@ -23,6 +26,8 @@ public class NetworkManager : MonoBehaviour {
 	}
 	
 	void OnJoinedRoom() {
+		spawnPoint = spawnPoints [PhotonNetwork.playerList.Length - 1].transform;
+
 		PhotonNetwork.Instantiate(playerPrefabName,
 		                          spawnPoint.position,
 		                          Quaternion.identity,
