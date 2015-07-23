@@ -3,7 +3,7 @@ using System.Collections;
 
 public class NetworkManager : MonoBehaviour {
 
-	const string VERSION = "V0.0.2";
+	const string VERSION = "v0.5.0";
 
 	public string roomName = "room1";
 	public string playerPrefabName = "Player";
