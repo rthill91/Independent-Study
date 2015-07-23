@@ -42,6 +42,7 @@ public class PlayerController : MonoBehaviour {
 		
 		// Move controller
 		cc.Move(move * Time.deltaTime);
+
 	}
 
 	void LateUpdate() {
@@ -52,13 +53,12 @@ public class PlayerController : MonoBehaviour {
 	void OnTriggerEnter(Collider other) {
 		if(other.tag == "Bullet") {
 			other.gameObject.SetActive(false);
-			Destroy(other.gameObject);
-			takeDamage();
+			PhotonNetwork.Destroy(other.gameObject);
+			damageTest();
 		}
 	}
 	*/
-	[RPC]
-	void takeDamage() {
+	void damageTest() {
 		health -= BulletDamage;
 		
 		if (health <= 0) {
@@ -69,6 +69,27 @@ public class PlayerController : MonoBehaviour {
 				health = 100;
 				gameObject.transform.position = GameObject.FindGameObjectWithTag ("Respawn").transform.position;
 			}
+		}
+	}
+
+	[RPC]
+	public void TakeDamage(int id) {
+		//if (id == gameObject.GetInstanceID()) {
+		int myID = gameObject.GetComponent<PhotonView> ().viewID;
+		if(id == myID) {
+			health -= BulletDamage;
+			
+			if (health <= 0) {
+				if (lives <= 1) {
+					Destroy (gameObject);
+				} else {
+					lives -= 1;
+					health = 100;
+					gameObject.transform.position = GameObject.FindGameObjectWithTag ("Respawn").transform.position;
+				}
+			}
+
+			//PhotonNetwork.Destroy(bulletId);
 		}
 	}
 }
