@@ -25,8 +25,6 @@ public class NetworkLobby : MonoBehaviour {
 		} else if (PhotonNetwork.room == null) {
 			// Room Name
 			ApplicationModel.roomName = GUI.TextField (new Rect (100, 100, 250, 30), ApplicationModel.roomName);
-			// Player Name
-			//ApplicationModel.playerName = GUI.TextField (new Rect (400, 100, 250, 30), ApplicationModel.playerName);
 			// Join Server Button
 			if (GUI.Button (new Rect (100, 150, 250, 50), "Start Server")) {
 				//PhotonNetwork.CreateRoom (ApplicationModel.roomName, true, true, 4);

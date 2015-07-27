@@ -12,12 +12,8 @@ public class BulletController : Photon.MonoBehaviour {
 			atomicTrigger = false;
 
 			PhotonView otherPV = other.gameObject.GetComponent<PhotonView>();
-			PhotonView myPV = gameObject.GetComponent<PhotonView>();
 
-			if(otherPV == null) {
-				Debug.LogError("BulletController get PV failed");
-			}
-			otherPV.RPC("TakeDamage", PhotonTargets.AllViaServer, otherPV.viewID);
+			otherPV.RPC("TakeDamage", PhotonTargets.AllViaServer);
 			PhotonNetwork.Destroy(gameObject);
 		}
 	}
