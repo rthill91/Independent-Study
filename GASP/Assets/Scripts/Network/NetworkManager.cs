@@ -3,6 +3,8 @@ using System.Collections;
 
 public class NetworkManager : MonoBehaviour {
 
+	const string VERSION = "v0.5.0";
+
 	public string playerPrefabName = "Player";
 	private Transform spawnPoint;
 	public GameObject[] spawnPoints;
@@ -18,17 +20,6 @@ public class NetworkManager : MonoBehaviour {
 		};
 
 		PhotonNetwork.JoinOrCreateRoom (ApplicationModel.roomName, roomOptions, TypedLobby.Default);
-		/*
-		if (PhotonNetwork.connected) {
-			spawnPoint = spawnPoints [PhotonNetwork.playerList.Length - 1].transform;
-
-			PhotonNetwork.Instantiate(playerPrefabName,
-			                          spawnPoint.position,
-			                          Quaternion.identity,
-			                          0);
-
-		}
-		*/
 	}
 
 	void OnJoinedRoom() {
