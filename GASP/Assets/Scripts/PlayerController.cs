@@ -14,9 +14,9 @@ public class PlayerController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		playerID = PhotonNetwork.player.ID;
 		cc = GetComponent<CharacterController>();
 
+		gameObject.GetComponent<Renderer> ().material.color = Color.blue;
 	}
 	
 	// Update is called once per frame

@@ -6,19 +6,26 @@ public class NetworkLobby : MonoBehaviour {
 
 	const string VERSION = "V0.6.0";
 	private RoomInfo[] roomsList;
+	private RoomOptions roomOptions;
 
 	// Use this for initialization
 	void Start () {
 		PhotonNetwork.ConnectUsingSettings (VERSION);
+
+		roomOptions = new RoomOptions () {
+			isOpen = true,
+			isVisible = true,
+			maxPlayers = 4
+		};
 	}
 
 	void OnGUI()
 	{
 		// Title
 		GUIStyle titleStyle = new GUIStyle ();
-		titleStyle.fontSize = 30;
+		titleStyle.fontSize = 50;
 		titleStyle.normal.textColor = Color.white;
-		GUI.Label (new Rect (Screen.width / 2, 20, 100, 50), "GASP", titleStyle);
+		GUI.Label (new Rect (Screen.width / 2 - 50, 20, 100, 50), "GASP", titleStyle);
 
 		if (!PhotonNetwork.connected) {
 			GUILayout.Label (PhotonNetwork.connectionStateDetailed.ToString ());
@@ -27,16 +34,30 @@ public class NetworkLobby : MonoBehaviour {
 			ApplicationModel.roomName = GUI.TextField (new Rect (100, 100, 250, 30), ApplicationModel.roomName);
 			// Join Server Button
 			if (GUI.Button (new Rect (100, 150, 250, 50), "Start Server")) {
-				//PhotonNetwork.CreateRoom (ApplicationModel.roomName, true, true, 4);
-				Application.LoadLevel("MainScene");
+				PhotonNetwork.JoinOrCreateRoom (ApplicationModel.roomName, roomOptions, TypedLobby.Default);
 			}
 			// Rooms List
 			if (roomsList != null) {
 				for (int i = 0; i < roomsList.Length; i++) {
 					if (GUI.Button (new Rect (100, 250 + (110 * i), 250, 30), "Join " + roomsList [i].name)) {
-						//PhotonNetwork.JoinRoom (roomsList [i].name);
-						Application.LoadLevel("MainScene");
+						ApplicationModel.roomName = roomsList [i].name;
+						PhotonNetwork.JoinRoom (ApplicationModel.roomName);
 					}
+				}
+			}
+		} else {
+			if(ApplicationModel.playerId == 0) {
+				ApplicationModel.playerId = PhotonNetwork.room.playerCount;
+			}
+			GUIStyle statsStyle = new GUIStyle ();
+			statsStyle.normal.textColor = Color.white;
+			GUI.Label (new Rect (Screen.width / 2 - 50, 150, 100, 50), PhotonNetwork.room.playerCount.ToString() + 
+			           " Player(s) in Room", statsStyle);
+
+			if(PhotonNetwork.isMasterClient) {
+				if(GUI.Button(new Rect(Screen.width / 2 - 100, 200, 200, 50), "Start Game")) {
+					var pv = gameObject.GetComponent<PhotonView>();
+					pv.RPC("StartGame", PhotonTargets.AllViaServer);
 				}
 			}
 		}
@@ -45,10 +66,9 @@ public class NetworkLobby : MonoBehaviour {
 	void OnReceivedRoomListUpdate() {
 		roomsList = PhotonNetwork.GetRoomList ();
 	}
-	/*
-	void OnJoinedRoom() {
-		Debug.Log ("Connected to Room");
+
+	[RPC]
+	void StartGame() {
 		Application.LoadLevel ("MainScene");
 	}
-	*/
 }

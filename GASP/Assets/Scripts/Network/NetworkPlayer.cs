@@ -17,6 +17,7 @@ public class NetworkPlayer : Photon.MonoBehaviour {
 	private int BulletDamage = 10;
 	private Text LivesText;
 	private Text HealthText;
+	private int nHealth = 100;
 
 	// Use this for initialization
 	void Start () {
@@ -45,9 +46,11 @@ public class NetworkPlayer : Photon.MonoBehaviour {
 		if(stream.isWriting) {
 			stream.SendNext(transform.position);
 			stream.SendNext(gun.transform.rotation);
+			stream.SendNext(health);
 		} else {
 			position = (Vector3)stream.ReceiveNext();
 			gunRot = (Quaternion)stream.ReceiveNext();
+			nHealth = (int)stream.ReceiveNext();
 
 		}
 	}
@@ -57,6 +60,9 @@ public class NetworkPlayer : Photon.MonoBehaviour {
 			transform.position = Vector3.Lerp (transform.position, position, Time.deltaTime * lerpSmoothing);
 			gun.transform.rotation = Quaternion.Lerp(gun.transform.rotation, gunRot, Time.deltaTime * lerpSmoothing);
 
+			var mixAmount = nHealth / 100.0f;
+
+			gameObject.GetComponent<Renderer>().material.color = Color.Lerp(Color.red, Color.gray, mixAmount);
 
 			yield return null;
 		}
@@ -75,7 +81,9 @@ public class NetworkPlayer : Photon.MonoBehaviour {
 				} else {
 					lives -= 1;
 					health = 100;
-					gameObject.transform.position = GameObject.FindGameObjectWithTag ("Respawn").transform.position;
+
+					var spawnpoints = GameObject.FindGameObjectsWithTag("Respawn");
+					gameObject.transform.position = spawnpoints[ApplicationModel.playerId - 1].transform.position;
 				}
 			}
 		}
@@ -85,6 +93,14 @@ public class NetworkPlayer : Photon.MonoBehaviour {
 		if (photonView.isMine) {
 			LivesText.text = lives.ToString () + " Lives";
 			HealthText.text = health.ToString () + " HP";
+		}
+	}
+
+	void OnPhotonPlayerDisconnected(PhotonPlayer other) {
+		if (PhotonNetwork.room.playerCount <= 1) {
+			PhotonNetwork.LeaveRoom ();
+			ApplicationModel.win = true;
+			Application.LoadLevel ("DeathScene");
 		}
 	}
 }

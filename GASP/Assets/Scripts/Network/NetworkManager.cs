@@ -13,22 +13,13 @@ public class NetworkManager : MonoBehaviour {
 	void Start () {
 		spawnPoints = GameObject.FindGameObjectsWithTag ("Respawn");
 
-		RoomOptions roomOptions = new RoomOptions () {
-			isOpen = true,
-			isVisible = true,
-			maxPlayers = 4
-		};
+		spawnPoint = spawnPoints [ApplicationModel.playerId - 1].transform;
 
-		PhotonNetwork.JoinOrCreateRoom (ApplicationModel.roomName, roomOptions, TypedLobby.Default);
-	}
-
-	void OnJoinedRoom() {
-		spawnPoint = spawnPoints [PhotonNetwork.playerList.Length - 1].transform;
-		
 		PhotonNetwork.Instantiate (playerPrefabName,
-		                          spawnPoint.position,
-		                          Quaternion.identity,
-		                          0);
+		                           spawnPoint.position,
+		                           Quaternion.identity,
+		                           0);
+
 	}
 
 	void OnGUI() {
