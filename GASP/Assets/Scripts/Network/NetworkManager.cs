@@ -2,9 +2,7 @@
 using System.Collections;
 
 public class NetworkManager : MonoBehaviour {
-
-	const string VERSION = "v0.5.0";
-
+		
 	public string playerPrefabName = "Player";
 	private Transform spawnPoint;
 	public GameObject[] spawnPoints;

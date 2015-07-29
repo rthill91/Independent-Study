@@ -4,7 +4,7 @@ using System;
 
 public class NetworkLobby : MonoBehaviour {
 
-	const string VERSION = "V0.6.0";
+	const string VERSION = "V0.8.0";
 	private RoomInfo[] roomsList;
 	private RoomOptions roomOptions;
 

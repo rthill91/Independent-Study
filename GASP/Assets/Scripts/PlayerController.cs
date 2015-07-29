@@ -10,7 +10,6 @@ public class PlayerController : MonoBehaviour {
 	public GameObject gun;
 
 	private CharacterController cc;
-	private int playerID;
 
 	// Use this for initialization
 	void Start () {
