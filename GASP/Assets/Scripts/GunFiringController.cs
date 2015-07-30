@@ -20,7 +20,6 @@ public class GunFiringController : MonoBehaviour {
 		if(Input.GetMouseButtonDown(0)) {
 			Vector3 clickPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 			clickPosition.z = 0;
-			//GameObject projectile = Instantiate(bullet, bulletSpawn.transform.position, Quaternion.identity) as GameObject;
 			GameObject projectile = PhotonNetwork.Instantiate("Bullet", 
 			                                                  bulletSpawn.transform.position, 
 			                                                  Quaternion.identity,
@@ -28,6 +27,8 @@ public class GunFiringController : MonoBehaviour {
 			
 			projectile.transform.LookAt(clickPosition);
 			projectile.GetComponent<Rigidbody>().AddForce(projectile.transform.forward * BulletSpeed);
+
+
 		}
 	}
 }

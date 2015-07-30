@@ -25,7 +25,11 @@ public class NetworkLobby : MonoBehaviour {
 		GUIStyle titleStyle = new GUIStyle ();
 		titleStyle.fontSize = 50;
 		titleStyle.normal.textColor = Color.white;
+		titleStyle.alignment = TextAnchor.MiddleCenter;
 		GUI.Label (new Rect (Screen.width / 2 - 50, 20, 100, 50), "GASP", titleStyle);
+
+		GUI.Label (new Rect (Screen.width / 2 - 50, Screen.height - 50, 100, 50), 
+		          PhotonNetwork.playerList.Length.ToString () + " Player(s) in Lobby");
 
 		if (!PhotonNetwork.connected) {
 			GUILayout.Label (PhotonNetwork.connectionStateDetailed.ToString ());
@@ -39,6 +43,9 @@ public class NetworkLobby : MonoBehaviour {
 			// Rooms List
 			if (roomsList != null) {
 				for (int i = 0; i < roomsList.Length; i++) {
+					if(roomsList[i].playerCount >= roomsList[i].maxPlayers) {
+						continue;
+					}
 					if (GUI.Button (new Rect (100, 250 + (110 * i), 250, 30), "Join " + roomsList [i].name)) {
 						ApplicationModel.roomName = roomsList [i].name;
 						PhotonNetwork.JoinRoom (ApplicationModel.roomName);
@@ -51,14 +58,18 @@ public class NetworkLobby : MonoBehaviour {
 			}
 			GUIStyle statsStyle = new GUIStyle ();
 			statsStyle.normal.textColor = Color.white;
+			statsStyle.alignment = TextAnchor.MiddleCenter;
 			GUI.Label (new Rect (Screen.width / 2 - 50, 150, 100, 50), PhotonNetwork.room.playerCount.ToString() + 
-			           " Player(s) in Room", statsStyle);
+			           " Player(s) in '" + PhotonNetwork.room.name + "'", statsStyle);
 
 			if(PhotonNetwork.isMasterClient) {
 				if(GUI.Button(new Rect(Screen.width / 2 - 100, 200, 200, 50), "Start Game")) {
 					var pv = gameObject.GetComponent<PhotonView>();
 					pv.RPC("StartGame", PhotonTargets.AllViaServer);
 				}
+			} else {
+				GUI.Label(new Rect (Screen.width / 2 - 100, 200, 200, 50), 
+				          "Waiting on Host to start the game.", statsStyle);
 			}
 		}
 	}
