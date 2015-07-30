@@ -28,8 +28,8 @@ public class NetworkLobby : MonoBehaviour {
 		titleStyle.alignment = TextAnchor.MiddleCenter;
 		GUI.Label (new Rect (Screen.width / 2 - 50, 20, 100, 50), "GASP", titleStyle);
 
-		GUI.Label (new Rect (Screen.width / 2 - 50, Screen.height - 50, 100, 50), 
-		          PhotonNetwork.playerList.Length.ToString () + " Player(s) in Lobby");
+		//GUI.Label (new Rect (Screen.width / 2 - 50, Screen.height - 50, 100, 50),
+		//          PhotonNetwork.playerList.Length.ToString () + " Player(s) in Lobby");
 
 		if (!PhotonNetwork.connected) {
 			GUILayout.Label (PhotonNetwork.connectionStateDetailed.ToString ());
@@ -59,7 +59,7 @@ public class NetworkLobby : MonoBehaviour {
 			GUIStyle statsStyle = new GUIStyle ();
 			statsStyle.normal.textColor = Color.white;
 			statsStyle.alignment = TextAnchor.MiddleCenter;
-			GUI.Label (new Rect (Screen.width / 2 - 50, 150, 100, 50), PhotonNetwork.room.playerCount.ToString() + 
+			GUI.Label (new Rect (Screen.width / 2 - 50, 150, 100, 50), PhotonNetwork.room.playerCount.ToString() +
 			           " Player(s) in '" + PhotonNetwork.room.name + "'", statsStyle);
 
 			if(PhotonNetwork.isMasterClient) {
@@ -68,7 +68,7 @@ public class NetworkLobby : MonoBehaviour {
 					pv.RPC("StartGame", PhotonTargets.AllViaServer);
 				}
 			} else {
-				GUI.Label(new Rect (Screen.width / 2 - 100, 200, 200, 50), 
+				GUI.Label(new Rect (Screen.width / 2 - 100, 200, 200, 50),
 				          "Waiting on Host to start the game.", statsStyle);
 			}
 		}
