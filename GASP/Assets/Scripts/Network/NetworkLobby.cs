@@ -7,7 +7,7 @@ public class NetworkLobby : MonoBehaviour {
 	const string VERSION = "V1.0.0";
 	private RoomInfo[] roomsList;
 	private RoomOptions roomOptions;
-	private int minPlayers = 1;
+	private int minPlayers = 2;
 
 	// Use this for initialization
 	void Start () {
