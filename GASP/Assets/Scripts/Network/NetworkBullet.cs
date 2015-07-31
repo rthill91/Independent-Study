@@ -5,7 +5,7 @@ public class NetworkBullet : Photon.MonoBehaviour {
 	
 	private bool isAlive = true;
 	private Vector3 position;
-	private float lerpSmoothing = 5f;
+	private float lerpSmoothing = 20f;
 	
 	// Use this for initialization
 	void Start () {

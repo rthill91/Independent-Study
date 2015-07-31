@@ -24,6 +24,8 @@ public class GunFiringController : MonoBehaviour {
 			                                                  bulletSpawn.transform.position, 
 			                                                  Quaternion.identity,
 			                                                  0) as GameObject;
+
+			projectile.GetComponent<BulletController>().parent = transform.parent.name;
 			
 			projectile.transform.LookAt(clickPosition);
 			projectile.GetComponent<Rigidbody>().AddForce(projectile.transform.forward * BulletSpeed);

@@ -7,13 +7,13 @@ public class NetworkPlayer : Photon.MonoBehaviour {
 
 	private bool isAlive = true;
 	private Vector3 position;
-	private float lerpSmoothing = 5f;
+	private float lerpSmoothing = 15f;
 	private GameObject gun;
 	private Quaternion gunRot;
 
 	
-	private int lives = 3;
-	private int health = 100;
+	private int lives = 3; // 3
+	private int health = 100; // 100
 	private int BulletDamage = 10;
 	private Text LivesText;
 	private Text HealthText;

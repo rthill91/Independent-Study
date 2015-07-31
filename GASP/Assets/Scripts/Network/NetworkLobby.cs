@@ -4,13 +4,14 @@ using System;
 
 public class NetworkLobby : MonoBehaviour {
 
-	const string VERSION = "V0.8.0";
+	const string VERSION = "V1.0.0";
 	private RoomInfo[] roomsList;
 	private RoomOptions roomOptions;
 
 	// Use this for initialization
 	void Start () {
-		PhotonNetwork.ConnectUsingSettings (VERSION);
+		if(!PhotonNetwork.connected)
+			PhotonNetwork.ConnectUsingSettings (VERSION);
 
 		roomOptions = new RoomOptions () {
 			isOpen = true,
@@ -70,6 +71,10 @@ public class NetworkLobby : MonoBehaviour {
 			} else {
 				GUI.Label(new Rect (Screen.width / 2 - 100, 200, 200, 50),
 				          "Waiting on Host to start the game.", statsStyle);
+			}
+
+			if(GUI.Button(new Rect(Screen.width / 2 - 100, 300, 200, 50), "Return To Lobby")) {
+				PhotonNetwork.LeaveRoom();
 			}
 		}
 	}
