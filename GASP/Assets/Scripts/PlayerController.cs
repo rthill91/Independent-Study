@@ -8,6 +8,7 @@ public class PlayerController : MonoBehaviour {
 	public float JumpSpeed;
 	public float Gravity = 8.0f;
 	public GameObject gun;
+	public Material kevin;
 
 	private CharacterController cc;
 
@@ -15,7 +16,11 @@ public class PlayerController : MonoBehaviour {
 	void Start () {
 		cc = GetComponent<CharacterController>();
 
-		gameObject.GetComponent<Renderer> ().material.color = Color.blue;
+		if (PhotonNetwork.room.name.ToLower () == "kevin") {
+			gameObject.GetComponent<Renderer>().material = kevin;
+		} else {
+			gameObject.GetComponent<Renderer> ().material.color = Color.blue;
+		}
 	}
 	
 	// Update is called once per frame
