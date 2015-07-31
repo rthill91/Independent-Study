@@ -22,7 +22,7 @@ public class GunFiringController : MonoBehaviour {
 			clickPosition.z = 0;
 			GameObject projectile = PhotonNetwork.Instantiate("Bullet", 
 			                                                  bulletSpawn.transform.position, 
-			                                                  Quaternion.identity,
+			                                                  bulletSpawn.transform.rotation,
 			                                                  0) as GameObject;
 
 			projectile.GetComponent<BulletController>().parent = transform.parent.name;

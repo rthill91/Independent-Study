@@ -7,6 +7,7 @@ public class NetworkLobby : MonoBehaviour {
 	const string VERSION = "V1.0.0";
 	private RoomInfo[] roomsList;
 	private RoomOptions roomOptions;
+	private int minPlayers = 1;
 
 	// Use this for initialization
 	void Start () {
@@ -24,13 +25,10 @@ public class NetworkLobby : MonoBehaviour {
 	{
 		// Title
 		GUIStyle titleStyle = new GUIStyle ();
-		titleStyle.fontSize = 50;
+		titleStyle.fontSize = 100;
 		titleStyle.normal.textColor = Color.white;
 		titleStyle.alignment = TextAnchor.MiddleCenter;
 		GUI.Label (new Rect (Screen.width / 2 - 50, 20, 100, 50), "GASP", titleStyle);
-
-		//GUI.Label (new Rect (Screen.width / 2 - 50, Screen.height - 50, 100, 50),
-		//          PhotonNetwork.playerList.Length.ToString () + " Player(s) in Lobby");
 
 		if (!PhotonNetwork.connected) {
 			GUILayout.Label (PhotonNetwork.connectionStateDetailed.ToString ());
@@ -64,9 +62,13 @@ public class NetworkLobby : MonoBehaviour {
 			           " Player(s) in '" + PhotonNetwork.room.name + "'", statsStyle);
 
 			if(PhotonNetwork.isMasterClient) {
-				if(GUI.Button(new Rect(Screen.width / 2 - 100, 200, 200, 50), "Start Game")) {
-					var pv = gameObject.GetComponent<PhotonView>();
-					pv.RPC("StartGame", PhotonTargets.AllViaServer);
+				if(PhotonNetwork.room.playerCount >= minPlayers) {
+					if(GUI.Button(new Rect(Screen.width / 2 - 100, 200, 200, 50), "Start Game")) {
+						var pv = gameObject.GetComponent<PhotonView>();
+						pv.RPC("StartGame", PhotonTargets.AllViaServer);
+					}
+				} else {
+					GUI.Label(new Rect(Screen.width / 2 - 100, 200, 200, 50), "Waiting for at least one other player");
 				}
 			} else {
 				GUI.Label(new Rect (Screen.width / 2 - 100, 200, 200, 50),
